@@ -42,7 +42,7 @@ class CustomerCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'jenniferlopez2@gmail.com',
+                  'jenniferlopez@gmail.com',
                   style: blackTextStyle.copyWith(
                     fontSize: 11,
                     fontWeight: light,
