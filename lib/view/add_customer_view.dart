@@ -111,6 +111,7 @@ class AddCustomerView extends StatelessWidget {
             CustomFormField(
               labelText: 'Phone Number',
               hintText: '089421',
+              keyboardType: TextInputType.number,
             ),
             CustomDatePickerField(
                 labelText: 'Date Of Birth',

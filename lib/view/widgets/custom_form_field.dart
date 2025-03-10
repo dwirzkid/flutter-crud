@@ -5,10 +5,12 @@ class CustomFormField extends StatelessWidget {
 
   final String labelText;
   final String hintText;
+  final TextInputType keyboardType;
 
   const CustomFormField({
     required this.labelText,
     required this.hintText,
+    this.keyboardType = TextInputType.text,
     super.key
     });
 
@@ -38,6 +40,7 @@ class CustomFormField extends StatelessWidget {
             ),
             child: TextFormField(
               style: greyTextStyle,
+              keyboardType: keyboardType,
               decoration: InputDecoration.collapsed(
                 hintText: hintText,
                 hintStyle: blackTextStyle.copyWith(
