@@ -8,13 +8,13 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget header() {
-      return Container(
-        height: 250,
+      return Expanded(
         child: Center(
-          child: Image(
-            image: AssetImage(
-              'assets/hello.jpg',
-            ),
+          child: Image.asset(
+            'assets/hello_rev_1.png',
+            width: 350,
+            height: 400,
+            fit: BoxFit.contain,
           ),
         ),
       );
@@ -32,7 +32,7 @@ class SplashView extends StatelessWidget {
               backgroundColor: Color(0xffFFEDFA),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-              )
+              ),
             ),
             child: Text(
               'Continue With Guest',
@@ -46,61 +46,61 @@ class SplashView extends StatelessWidget {
     }
 
     Widget content() {
-      return Expanded(
-        child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.only(top: 30),
-          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                  20,
-                ),
-                topRight: Radius.circular(20),
-              )),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Start Learning Now',
-                style: blackTextStyle.copyWith(
-                  fontSize: 24,
-                  fontWeight: semiBold,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Take you first step towards, mastering a new language \n today',
-                style: blackTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: light,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomButton(
-                    title: 'Log in',
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
-                    },
-                  ),
-                  CustomButton(
-                    title: 'Register',
-                  ),
-                ],
-              ),
-              buttonGuest(),
-            ],
+      return Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
           ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize:
+              MainAxisSize.min,
+          children: [
+            Text(
+              'Start To Make',
+              style: blackTextStyle.copyWith(
+                fontSize: 24,
+                fontWeight: semiBold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'try to make some people in one application',
+              style: blackTextStyle.copyWith(
+                fontSize: 12,
+                fontWeight: light,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomButton(
+                  title: 'Log in',
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/home', (route) => false);
+                  },
+                  width:
+                      MediaQuery.of(context).size.width * 0.4,
+                ),
+                CustomButton(
+                  title: 'Register',
+                  onPressed: () {
+                    
+                  },
+                  width:
+                      MediaQuery.of(context).size.width * 0.4, 
+                ),
+              ],
+            ),
+            buttonGuest(),
+          ],
         ),
       );
     }
@@ -108,7 +108,7 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xffFFEDFA),
       body: SafeArea(
-        child: ListView(
+        child: Column(
           children: [
             header(),
             content(),
