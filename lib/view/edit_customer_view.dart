@@ -1,4 +1,5 @@
 import 'package:crud_project_1/theme.dart';
+import 'package:crud_project_1/view/widgets/custom_button.dart';
 import 'package:crud_project_1/view/widgets/custom_date_picker_field.dart';
 import 'package:crud_project_1/view/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ class EditCustomerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     TextEditingController dateController = TextEditingController();
 
     PreferredSizeWidget header() {
@@ -114,7 +114,10 @@ class EditCustomerView extends StatelessWidget {
               hintText: '089421',
               keyboardType: TextInputType.number,
             ),
-            CustomDatePickerField(labelText: 'Date Of Birth', hintText: 'Select Date', controller: dateController),
+            CustomDatePickerField(
+                labelText: 'Date Of Birth',
+                hintText: 'Select Date',
+                controller: dateController),
             CustomFormField(
               labelText: 'Bank Account Number',
               hintText: '8829311',
@@ -126,8 +129,19 @@ class EditCustomerView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                buttonCancel(),
-                buttonSave(),
+                CustomButton(
+                  title: 'Cancel',
+                  width: 120,
+                  
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CustomButton(
+                  title: 'Update',
+                  width: 120,
+                  onPressed: () {},
+                )
               ],
             )
           ],

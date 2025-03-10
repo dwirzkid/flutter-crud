@@ -4,14 +4,22 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final String title;
   final VoidCallback? onPressed;
+  final double? width;
+  final double? height;
 
-  const CustomButton({required this.title, this.onPressed, super.key});
+  const CustomButton({
+    required this.title,
+    this.onPressed,
+    this.width,  
+    this.height, 
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 50,
+      width: width ?? double.infinity,
+      height: height ?? 50,
       margin: EdgeInsets.only(top: 50),
       decoration: BoxDecoration(
         color: Color(0xffEC7FA9),
