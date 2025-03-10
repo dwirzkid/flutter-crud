@@ -1,3 +1,4 @@
+import 'package:crud_project_1/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomDatePickerField extends StatefulWidget {
@@ -56,30 +57,32 @@ class _CustomDatePickerFieldState extends State<CustomDatePickerField> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _selectDate,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.labelText,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+      child: Container(
+        margin: EdgeInsets.only(top: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.labelText,
+              style: blackTextStyle.copyWith(
+              fontSize: 14,
+              fontWeight: medium,
             ),
-          ),
-          SizedBox(height: 8),
-          TextFormField(
-            controller: widget.controller,
-            readOnly: true,
-            decoration: InputDecoration(
-              hintText: widget.hintText,
-              hintStyle: TextStyle(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+            ),
+            SizedBox(height: 8),
+            TextFormField(
+              controller: widget.controller,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                hintStyle: TextStyle(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
