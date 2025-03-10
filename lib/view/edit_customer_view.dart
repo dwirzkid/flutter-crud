@@ -1,4 +1,5 @@
 import 'package:crud_project_1/theme.dart';
+import 'package:crud_project_1/view/widgets/custom_date_picker_field.dart';
 import 'package:crud_project_1/view/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,9 @@ class EditCustomerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    TextEditingController dateController = TextEditingController();
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: Color(0xffFFEDFA),
@@ -108,11 +112,9 @@ class EditCustomerView extends StatelessWidget {
             CustomFormField(
               labelText: 'Phone Number',
               hintText: '089421',
+              keyboardType: TextInputType.number,
             ),
-            CustomFormField(
-              labelText: 'Date Of Birth',
-              hintText: '8 March 1992',
-            ),
+            CustomDatePickerField(labelText: 'Date Of Birth', hintText: 'Select Date', controller: dateController),
             CustomFormField(
               labelText: 'Bank Account Number',
               hintText: '8829311',
