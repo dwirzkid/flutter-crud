@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? double.infinity,
+      width: width ?? MediaQuery.of(context).size.width * 0.4,
       height: height ?? 50,
       margin: EdgeInsets.only(top: 50),
       decoration: BoxDecoration(
