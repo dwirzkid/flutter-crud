@@ -119,7 +119,9 @@ class SignInView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/forgot-password');
+                  },
                   child: Text(
                     'Forgot Password?',
                     style: blackTextStyle.copyWith(
@@ -132,6 +134,9 @@ class SignInView extends StatelessWidget {
             CustomButton(
               title: 'Log In',
               width: double.infinity,
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
