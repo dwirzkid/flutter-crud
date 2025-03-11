@@ -83,8 +83,9 @@ class SplashView extends StatelessWidget {
                 CustomButton(
                   title: 'Log in',
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/home', (route) => false);
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //     context, '/sign-in', (route) => false);
+                    Navigator.pushNamed(context, '/sign-in');
                   },
                   width:
                       MediaQuery.of(context).size.width * 0.4,
@@ -92,7 +93,7 @@ class SplashView extends StatelessWidget {
                 CustomButton(
                   title: 'Register',
                   onPressed: () {
-                    
+                    Navigator.pushNamed(context, '/sign-up');
                   },
                   width:
                       MediaQuery.of(context).size.width * 0.4, 

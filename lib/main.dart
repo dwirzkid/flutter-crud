@@ -1,6 +1,7 @@
 import 'package:crud_project_1/view/add_customer_view.dart';
 import 'package:crud_project_1/view/edit_customer_view.dart';
 import 'package:crud_project_1/view/home_view.dart';
+import 'package:crud_project_1/view/sign_in_view.dart';
 import 'package:crud_project_1/view/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => SplashView(),
+        '/sign-in': (context) => SignInView(),
         '/home': (context) => HomeView(),
         '/add-customer': (context) => AddCustomerView(),
         '/edit-customer': (context) => EditCustomerView(),

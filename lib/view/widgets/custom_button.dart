@@ -17,26 +17,29 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width ?? MediaQuery.of(context).size.width * 0.4,
-      height: height ?? 50,
-      margin: EdgeInsets.only(top: 50),
-      decoration: BoxDecoration(
-        color: Color(0xffEC7FA9),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: whiteTextStyle.copyWith(
-              fontSize: 18,
-              fontWeight: medium,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: width ?? MediaQuery.of(context).size.width * 0.4,
+        height: height ?? 50,
+        margin: EdgeInsets.only(top: 50),
+        decoration: BoxDecoration(
+          color: Color(0xffEC7FA9),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: whiteTextStyle.copyWith(
+                fontSize: 18,
+                fontWeight: medium,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
