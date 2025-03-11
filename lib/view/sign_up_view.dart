@@ -102,8 +102,8 @@ class _SignUpViewState extends State<SignUpView> {
 
     Widget content() {
       return Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
+        margin: EdgeInsets.only(
+          left: 15, right: 15, bottom: 20,
         ),
         child: Column(
           children: [
@@ -113,7 +113,7 @@ class _SignUpViewState extends State<SignUpView> {
             ),
             listLogin(
               'Log In With Facebook',
-              'assets/image_profile.jpeg',
+              'assets/google_logo.webp',
             ),
             divider(),
             CustomFormField(
@@ -157,7 +157,7 @@ class _SignUpViewState extends State<SignUpView> {
               width: double.infinity,
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                    context, '/sign-in', (route) => false);
               },
             ),
             Row(
@@ -198,7 +198,7 @@ class _SignUpViewState extends State<SignUpView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: header(),
-      body: Column(
+      body: ListView(
         children: [
           SizedBox(
             height: 30,
