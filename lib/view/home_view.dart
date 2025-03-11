@@ -19,7 +19,7 @@ class HomeView extends StatelessWidget {
             ),
             content: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -32,8 +32,7 @@ class HomeView extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
                   Row(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
@@ -54,15 +53,16 @@ class HomeView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Column(
                         children: [
                           Container(
                             width: 70,
                             height: 30,
                             child: TextButton(
-                              onPressed: () {                                
-                              },
+                              onPressed: () {},
                               style: TextButton.styleFrom(
                                 backgroundColor: Color(0xffEC7FA9),
                                 shape: RoundedRectangleBorder(
@@ -80,7 +80,7 @@ class HomeView extends StatelessWidget {
                           ),
                           SizedBox(height: 7),
                           Container(
-                           width: 70,
+                            width: 70,
                             height: 30,
                             child: TextButton(
                               onPressed: () {
@@ -104,6 +104,75 @@ class HomeView extends StatelessWidget {
                         ],
                       ),
                     ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Future<void> showLogoutDialog() {
+      return showDialog(
+        context: context,
+        builder: (BuildContext) => Container(
+          width: MediaQuery.of(context).size.width - (2 * 30),
+          child: AlertDialog(
+            backgroundColor: Color(0xffFFEDFA),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(Icons.close),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Are you sure to exit',
+                        style: blackTextStyle.copyWith(
+                          fontWeight: light,
+                        ),
+                      ),
+                      
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 30,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Color(0xffEC7FA9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Logout',
+                        style: blackTextStyle.copyWith(
+                          fontWeight: semiBold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -147,7 +216,9 @@ class HomeView extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                showLogoutDialog();
+              },
               child: Container(
                 width: 50,
                 height: 50,
