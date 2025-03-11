@@ -101,11 +101,11 @@ class SignInView extends StatelessWidget {
         child: Column(
           children: [
             listLogin('Log In With Google', 'assets/facebook.png',),
-            listLogin('Log In With Facebook', 'assets/image_profile.jpeg',),
+            listLogin('Log In With Facebook', 'assets/google_logo.webp',),
             divider(),
             CustomFormField(
               labelText: 'Email',
-              hintText: 'Enter your name',
+              hintText: 'Enter your email',
             ),
             CustomFormField(
               labelText: 'Password',
