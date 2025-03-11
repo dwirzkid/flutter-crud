@@ -32,7 +32,7 @@ class ForgetPasswordView extends StatelessWidget {
           children: [
             CustomFormField(
               labelText: 'Email',
-              hintText: 'Enter your name',
+              hintText: 'Enter your email',
             ),
             CustomButton(
               title: 'Submit',
