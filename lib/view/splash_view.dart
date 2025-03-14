@@ -58,8 +58,7 @@ class SplashView extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize:
-              MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'Start To Make',
@@ -80,23 +79,26 @@ class SplashView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomButton(
-                  title: 'Log in',
-                  onPressed: () {
-                    // Navigator.pushNamedAndRemoveUntil(
-                    //     context, '/sign-in', (route) => false);
-                    Navigator.pushNamed(context, '/sign-in');
-                  },
-                  width:
-                      MediaQuery.of(context).size.width * 0.4,
+                Expanded(
+                  child: CustomButton(
+                    title: 'Log in',
+                    onPressed: () {
+                      // Navigator.pushNamedAndRemoveUntil(
+                      //     context, '/sign-in', (route) => false);
+                      Navigator.pushNamed(context, '/sign-in');
+                    },
+                    width: double.infinity,
+                  ),
                 ),
-                CustomButton(
-                  title: 'Register',
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/sign-up');
-                  },
-                  width:
-                      MediaQuery.of(context).size.width * 0.4, 
+                SizedBox(width: 10,),
+                Expanded(
+                  child: CustomButton(
+                    title: 'Register',
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/sign-up');
+                    },
+                    width: double.infinity,
+                  ),
                 ),
               ],
             ),

@@ -1,20 +1,26 @@
+import 'package:crud_project_1/services/auth_service.dart';
 import 'package:crud_project_1/theme.dart';
+import 'package:crud_project_1/view/sign_in_view.dart';
 import 'package:crud_project_1/view/widgets/custom_button.dart';
 import 'package:crud_project_1/view/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({super.key});
+  SignUpView({super.key});
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
 }
 
 class _SignUpViewState extends State<SignUpView> {
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
-    bool isChecked = false;
-
     PreferredSizeWidget header() {
       return AppBar(
         centerTitle: true,
@@ -103,7 +109,9 @@ class _SignUpViewState extends State<SignUpView> {
     Widget content() {
       return Container(
         margin: EdgeInsets.only(
-          left: 15, right: 15, bottom: 20,
+          left: 15,
+          right: 15,
+          bottom: 20,
         ),
         child: Column(
           children: [
@@ -117,14 +125,17 @@ class _SignUpViewState extends State<SignUpView> {
             ),
             divider(),
             CustomFormField(
+              controller: _fullNameController,
               labelText: 'Name',
               hintText: 'Enter your name',
             ),
             CustomFormField(
               labelText: 'Email',
+              controller: _emailController,
               hintText: 'Enter your email',
             ),
             CustomFormField(
+              controller: _passwordController,
               labelText: 'Password',
               hintText: 'Enter your password',
               obscureText: true,
@@ -152,43 +163,62 @@ class _SignUpViewState extends State<SignUpView> {
                 ),
               ],
             ),
+          ],
+        ),
+      );
+    }
+
+    Widget bottomSection(BuildContext context) {
+      return Container(
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             CustomButton(
               title: 'Register',
               width: double.infinity,
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/sign-in', (route) => false);
+              onPressed: () async {
+                // Validasi checkbox
+                if (!isChecked) {
+                  Fluttertoast.showToast(
+                    msg: 'Please accept the terms and conditions',
+                    backgroundColor: Colors.red,
+                  );
+                  return;
+                }
+
+                // Validasi field Full Name, Email, dan Password
+                if (_fullNameController.text.trim().isEmpty ||
+                    _emailController.text.trim().isEmpty ||
+                    _passwordController.text.isEmpty) {
+                  Fluttertoast.showToast(
+                    msg: 'Please fill all fields',
+                    backgroundColor: Colors.red,
+                  );
+                  return;
+                }
+
+                // Tampilkan loading spinner
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+
+                try {
+                  // Proses registrasi dengan mengirim fullName, email, dan password
+                  await AuthService().signup(
+                    fullName: _fullNameController.text.trim(),
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text,
+                    context: context,
+                  );
+                  // Navigasi ke SignInView dilakukan di dalam AuthService.signup
+                } catch (e) {
+                  // Penanganan error tambahan (jika diperlukan)
+                }
               },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  'Have an account?',
-                  style: blackTextStyle.copyWith(
-                    fontWeight: light,
-                    fontSize: 10,
-                  ),
-                ),
-                SizedBox(
-                  width: 3,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/sign-in');
-                  },
-                  child: Text(
-                    'Login',
-                    style: blackTextStyle.copyWith(
-                      fontWeight: semiBold,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
@@ -200,12 +230,11 @@ class _SignUpViewState extends State<SignUpView> {
       appBar: header(),
       body: ListView(
         children: [
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30),
           content(),
         ],
       ),
+      bottomNavigationBar: bottomSection(context),
     );
   }
 }

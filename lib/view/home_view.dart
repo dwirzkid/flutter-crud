@@ -1,6 +1,8 @@
 import 'package:crud_project_1/theme.dart';
 import 'package:crud_project_1/view/widgets/customer_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -156,9 +158,25 @@ class HomeView extends StatelessWidget {
                     width: double.infinity,
                     height: 30,
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-                      },
+                      onPressed: () async {
+                    // Tutup dialog terlebih dahulu
+                    Navigator.pop(context);
+                    try {
+                      // Panggil signOut dari Firebase
+                      await FirebaseAuth.instance.signOut();
+                      // Arahkan ke menu awal dengan menghapus semua rute sebelumnya
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/',
+                        (route) => false,
+                      );
+                    } catch (e) {
+                      Fluttertoast.showToast(
+                        msg: 'Logout failed, please try again.',
+                        backgroundColor: Colors.red,
+                      );
+                    }
+                  },
                       style: TextButton.styleFrom(
                         backgroundColor: Color(0xffEC7FA9),
                         shape: RoundedRectangleBorder(

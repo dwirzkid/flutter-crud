@@ -1,10 +1,28 @@
+import 'package:crud_project_1/services/auth_service.dart';
 import 'package:crud_project_1/theme.dart';
 import 'package:crud_project_1/view/widgets/custom_button.dart';
 import 'package:crud_project_1/view/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
 
-class SignInView extends StatelessWidget {
+class SignInView extends StatefulWidget {
   const SignInView({super.key});
+
+  @override
+  State<SignInView> createState() => _SignInViewState();
+}
+
+class _SignInViewState extends State<SignInView> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,10 +122,12 @@ class SignInView extends StatelessWidget {
             listLogin('Log In With Facebook', 'assets/google_logo.webp',),
             divider(),
             CustomFormField(
+              controller: _emailController,
               labelText: 'Email',
               hintText: 'Enter your email',
             ),
             CustomFormField(
+              controller: _passwordController,
               labelText: 'Password',
               hintText: 'Enter your password',
               obscureText: true,
@@ -130,12 +150,39 @@ class SignInView extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ),            
+          ],
+        ),
+      );
+    }
+
+    Widget bottomSection(){
+      return Container(
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             CustomButton(
-              title: 'Log In',
+              title: 'Sign In',
               width: double.infinity,
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+              onPressed: () async {
+                // Tampilkan loading spinner
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+                try {
+                  // Panggil method signin di AuthService
+                  await AuthService().signin(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text,
+                    context: context,
+                  );
+                } catch (e) {
+                  // Error handling jika diperlukan
+                }
               },
             ),
             Row(
@@ -176,7 +223,7 @@ class SignInView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: header(),
-      body: Column(
+      body: ListView(
         children: [
           SizedBox(
             height: 30,
@@ -184,6 +231,7 @@ class SignInView extends StatelessWidget {
           content(),
         ],
       ),
+      bottomNavigationBar: bottomSection(),
     );
   }
 }
