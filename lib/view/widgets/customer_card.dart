@@ -2,9 +2,20 @@ import 'package:crud_project_1/theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomerCard extends StatelessWidget {
+  final String fullName;
+  final String email;
+  final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
   final VoidCallback? onPressed;
 
-  const CustomerCard({this.onPressed, super.key});
+  const CustomerCard({
+    required this.fullName,
+    required this.email,
+    this.onDelete,
+    this.onEdit,
+    this.onPressed,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +46,14 @@ class CustomerCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Jane Lopez',
+                  fullName,
                   style: blackTextStyle.copyWith(
                     fontSize: 12,
                     fontWeight: semiBold,
                   ),
                 ),
                 Text(
-                  'jenniferlopez@gmail.com',
+                  email,
                   style: blackTextStyle.copyWith(
                     fontSize: 11,
                     fontWeight: light,
@@ -54,13 +65,11 @@ class CustomerCard extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                onPressed: onPressed,
+                onPressed: onDelete,
                 icon: const Icon(Icons.delete_outline, color: Colors.red),
               ),
               IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/edit-customer');
-                },
+                onPressed: onEdit,
                 icon: const Icon(Icons.edit_outlined),
               ),
             ],

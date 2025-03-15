@@ -1,21 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_project_1/services/firestore_service.dart';
 import 'package:crud_project_1/theme.dart';
 import 'package:crud_project_1/view/widgets/customer_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final FirestoreService firestoreService = FirestoreService();
+
+  final TextEditingController firstNameController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    Future<void> showDeleteDialog() {
+    Future<void> showDeleteDialog(
+        BuildContext context, String customerId, String customerName) {
       return showDialog(
         context: context,
-        builder: (BuildContext) => Container(
-          width: MediaQuery.of(context).size.width - (2 * 30),
+        builder: (dialogContext) => Container(
+          width: MediaQuery.of(dialogContext).size.width - (2 * 30),
           child: AlertDialog(
-            backgroundColor: Color(0xffFFEDFA),
+            backgroundColor: const Color(0xffFFEDFA),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -23,50 +35,66 @@ class HomeView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Tombol untuk menutup dialog
                   Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pop(dialogContext);
                       },
-                      child: Icon(Icons.close),
+                      child: const Icon(Icons.close),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Tampilkan pesan dan nama customer
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Are you sure delete?',
+                            'Are you sure to delete?',
                             style: blackTextStyle.copyWith(
                               fontWeight: light,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'Jane Lopez',
+                            customerName,
                             style: blackTextStyle.copyWith(
                               fontWeight: semiBold,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      const SizedBox(width: 10),
+                      // Tombol Delete dan Cancel
                       Column(
                         children: [
                           Container(
                             width: 70,
                             height: 30,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                try {
+                                  await FirestoreService()
+                                      .deleteCustomer(customerId);
+                                  Navigator.pop(dialogContext);
+                                  Fluttertoast.showToast(
+                                    msg: "Customer deleted successfully",
+                                    backgroundColor: Colors.green,
+                                  );
+                                } catch (e) {
+                                  Navigator.pop(dialogContext);
+                                  Fluttertoast.showToast(
+                                      msg: "Error deleting customer: $e",
+                                      backgroundColor: Colors.red);
+                                }
+                              },
                               style: TextButton.styleFrom(
-                                backgroundColor: Color(0xffEC7FA9),
+                                backgroundColor: const Color(0xffEC7FA9),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -80,13 +108,13 @@ class HomeView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 7),
+                          const SizedBox(height: 7),
                           Container(
                             width: 70,
                             height: 30,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.pop(dialogContext);
                               },
                               style: TextButton.styleFrom(
                                 backgroundColor: Colors.white,
@@ -148,7 +176,6 @@ class HomeView extends StatelessWidget {
                           fontWeight: light,
                         ),
                       ),
-                      
                     ],
                   ),
                   SizedBox(
@@ -159,24 +186,24 @@ class HomeView extends StatelessWidget {
                     height: 30,
                     child: TextButton(
                       onPressed: () async {
-                    // Tutup dialog terlebih dahulu
-                    Navigator.pop(context);
-                    try {
-                      // Panggil signOut dari Firebase
-                      await FirebaseAuth.instance.signOut();
-                      // Arahkan ke menu awal dengan menghapus semua rute sebelumnya
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/',
-                        (route) => false,
-                      );
-                    } catch (e) {
-                      Fluttertoast.showToast(
-                        msg: 'Logout failed, please try again.',
-                        backgroundColor: Colors.red,
-                      );
-                    }
-                  },
+                        // Tutup dialog terlebih dahulu
+                        Navigator.pop(context);
+                        try {
+                          // Panggil signOut dari Firebase
+                          await FirebaseAuth.instance.signOut();
+                          // Arahkan ke menu awal dengan menghapus semua rute sebelumnya
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/',
+                            (route) => false,
+                          );
+                        } catch (e) {
+                          Fluttertoast.showToast(
+                            msg: 'Logout failed, please try again.',
+                            backgroundColor: Colors.red,
+                          );
+                        }
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Color(0xffEC7FA9),
                         shape: RoundedRectangleBorder(
@@ -350,17 +377,44 @@ class HomeView extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: List.generate(
-                      10,
-                      (index) => CustomerCard(
-                        onPressed: () {
-                          showDeleteDialog();
-                        },
-                      ),
-                    ),
-                  ),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirestoreService().getCustomers(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(child: Text('No Costumer found'));
+                    }
+                    final docs = snapshot.data!.docs;
+                    return ListView.builder(
+                      itemCount: docs.length,
+                      itemBuilder: (context, index) {
+                        final data = docs[index].data() as Map<String, dynamic>;
+                        final String firstName = data['firstName'] ?? "";
+                        final String lastName = data['lastName'] ?? "";
+                        final String email = data['email'] ?? "";
+                        final String fullName = "$firstName $lastName".trim();
+                        final String customerId = docs[index].id;
+                        final String customerName = fullName;
+
+                        return CustomerCard(
+                          fullName: fullName,
+                          email: email,
+                          onDelete: () {
+                            showDeleteDialog(context, customerId, customerName);
+                          },
+                          onEdit: () {
+                            Navigator.pushNamed(
+                              context,
+                              '/edit-customer',
+                              arguments: customerId,
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],

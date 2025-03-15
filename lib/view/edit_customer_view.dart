@@ -1,16 +1,151 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_project_1/services/firestore_service.dart';
 import 'package:crud_project_1/theme.dart';
 import 'package:crud_project_1/view/widgets/custom_button.dart';
 import 'package:crud_project_1/view/widgets/custom_date_picker_field.dart';
+import 'package:crud_project_1/view/widgets/custom_form_edit_field.dart';
 import 'package:crud_project_1/view/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class EditCustomerView extends StatelessWidget {
+class EditCustomerView extends StatefulWidget {
   const EditCustomerView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController dateController = TextEditingController();
+  State<EditCustomerView> createState() => _EditCustomerViewState();
+}
 
+class _EditCustomerViewState extends State<EditCustomerView> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _bankAccountController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  bool _isLoading = false;
+  String? customerId;
+  Map<String, dynamic>? customerData;
+
+  @override
+  void initState() {
+    super.initState();
+    // Melakukan pengecekan argument setelah widget diinisialisasi sepenuhnya
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkForArguments();
+    });
+  }
+
+  void _checkForArguments() {
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null && args is String) {
+      customerId = args;
+      _fetchCustomerData();
+    }
+  }
+
+  Future<void> _fetchCustomerData() async {
+    if (customerId == null) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('customers')
+          .doc(customerId)
+          .get();
+          
+      final data = doc.data();
+      if (data != null) {
+        setState(() {
+          customerData = data;
+          _firstNameController.text = data['firstName'] ?? '';
+          _lastNameController.text = data['lastName'] ?? '';
+          _phoneController.text = data['phone'] ?? '';
+          _dateController.text = data['dateOfBirth'] ?? '';
+          _bankAccountController.text = data['bankAccount'] ?? '';
+          _emailController.text = data['email'] ?? '';
+        });
+      } else {
+        Fluttertoast.showToast(
+          msg: "Customer data not found",
+          backgroundColor: Colors.red
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error fetching data: $e",
+        backgroundColor: Colors.red
+      );
+    }
+    
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _updateCustomer() async {
+    if (customerId == null) return;
+    
+    // Validasi: Pastikan semua field terisi
+    if (_firstNameController.text.isEmpty ||
+        _lastNameController.text.isEmpty ||
+        _phoneController.text.isEmpty ||
+        _dateController.text.isEmpty ||
+        _bankAccountController.text.isEmpty ||
+        _emailController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Please fill all fields");
+      return;
+    }
+
+    final updatedData = {
+      "firstName": _firstNameController.text.trim(),
+      "lastName": _lastNameController.text.trim(),
+      "phone": _phoneController.text.trim(),
+      "dateOfBirth": _dateController.text.trim(),
+      "bankAccount": _bankAccountController.text.trim(),
+      "email": _emailController.text.trim(),
+      "updatedAt": DateTime.now(),
+    };
+
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      await FirestoreService().updateCustomer(customerId!, updatedData);
+      Fluttertoast.showToast(
+        msg: "Customer updated successfully",
+        backgroundColor: Colors.green
+      );
+      Navigator.pop(context); // Kembali setelah update
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: "Error updating customer: $e", 
+          backgroundColor: Colors.red
+      );
+    }
+    
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneController.dispose();
+    _dateController.dispose();
+    _bankAccountController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: Color(0xffFFEDFA),
@@ -29,64 +164,6 @@ class EditCustomerView extends StatelessWidget {
       );
     }
 
-    Widget buttonSave() {
-      return GestureDetector(
-        onTap: () {},
-        child: Container(
-          width: 100,
-          height: 40,
-          margin: EdgeInsets.only(top: 50),
-          decoration: BoxDecoration(
-            color: Color(0xffEC7FA9),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Update',
-                style: whiteTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: medium,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget buttonCancel() {
-      return GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          width: 100,
-          height: 40,
-          margin: EdgeInsets.only(top: 50),
-          decoration: BoxDecoration(
-            color: Color(0xffEC7FA9),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Cancel',
-                style: whiteTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: medium,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     Widget content() {
       return Container(
         width: double.infinity,
@@ -101,15 +178,18 @@ class EditCustomerView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomFormField(
+            CustomFormEditField(
+              controller: _firstNameController,
               labelText: 'First Name',
               hintText: 'Michael',
             ),
-            CustomFormField(
+            CustomFormEditField(
+              controller: _lastNameController,
               labelText: 'Last Name',
               hintText: 'Andlewis',
             ),
-            CustomFormField(
+            CustomFormEditField(
+              controller: _phoneController,
               labelText: 'Phone Number',
               hintText: '089421',
               keyboardType: TextInputType.number,
@@ -117,22 +197,24 @@ class EditCustomerView extends StatelessWidget {
             CustomDatePickerField(
                 labelText: 'Date Of Birth',
                 hintText: 'Select Date',
-                controller: dateController),
-            CustomFormField(
+                controller: _dateController),
+            CustomFormEditField(
+              controller: _bankAccountController,
               labelText: 'Bank Account Number',
               hintText: '8829311',
             ),
-            CustomFormField(
+            CustomFormEditField(
+              controller: _emailController,
               labelText: 'Email',
               hintText: 'mi1ch@gmail.com',
             ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomButton(
                   title: 'Cancel',
                   width: 120,
-                  
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -140,7 +222,9 @@ class EditCustomerView extends StatelessWidget {
                 CustomButton(
                   title: 'Update',
                   width: 120,
-                  onPressed: () {},
+                  onPressed: () {
+                    _updateCustomer();
+                  },
                 )
               ],
             )
@@ -153,13 +237,15 @@ class EditCustomerView extends StatelessWidget {
       backgroundColor: Color(0xffFFEDFA),
       appBar: header(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              content(),
-            ],
-          ),
-        ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    content(),
+                  ],
+                ),
+              ),
       ),
     );
   }
