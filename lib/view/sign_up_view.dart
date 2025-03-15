@@ -198,7 +198,7 @@ class _SignUpViewState extends State<SignUpView> {
                   return;
                 }
 
-                // Tampilkan loading spinner
+              
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -207,16 +207,16 @@ class _SignUpViewState extends State<SignUpView> {
                 );
 
                 try {
-                  // Proses registrasi dengan mengirim fullName, email, dan password
+            
                   await AuthService().signup(
                     fullName: _fullNameController.text.trim(),
                     email: _emailController.text.trim(),
                     password: _passwordController.text,
                     context: context,
                   );
-                  // Navigasi ke SignInView dilakukan di dalam AuthService.signup
+             
                 } catch (e) {
-                  // Penanganan error tambahan (jika diperlukan)
+                  throw e;
                 }
               },
             ),
