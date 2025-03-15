@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Tombol untuk menutup dialog
+                 
                   Align(
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
@@ -50,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Tampilkan pesan dan nama customer
+                 
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -70,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                       const SizedBox(width: 10),
-                      // Tombol Delete dan Cancel
+                   
                       Column(
                         children: [
                           Container(
@@ -186,12 +186,12 @@ class _HomeViewState extends State<HomeView> {
                     height: 30,
                     child: TextButton(
                       onPressed: () async {
-                        // Tutup dialog terlebih dahulu
+                    
                         Navigator.pop(context);
                         try {
-                          // Panggil signOut dari Firebase
+                    
                           await FirebaseAuth.instance.signOut();
-                          // Arahkan ke menu awal dengan menghapus semua rute sebelumnya
+                    
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             '/',
