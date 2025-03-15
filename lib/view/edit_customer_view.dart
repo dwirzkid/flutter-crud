@@ -30,7 +30,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
   @override
   void initState() {
     super.initState();
-    // Melakukan pengecekan argument setelah widget diinisialisasi sepenuhnya
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkForArguments();
     });
@@ -89,7 +89,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
   Future<void> _updateCustomer() async {
     if (customerId == null) return;
     
-    // Validasi: Pastikan semua field terisi
+   
     if (_firstNameController.text.isEmpty ||
         _lastNameController.text.isEmpty ||
         _phoneController.text.isEmpty ||
@@ -120,7 +120,7 @@ class _EditCustomerViewState extends State<EditCustomerView> {
         msg: "Customer updated successfully",
         backgroundColor: Colors.green
       );
-      Navigator.pop(context); // Kembali setelah update
+      Navigator.pop(context); 
     } catch (e) {
       Fluttertoast.showToast(
           msg: "Error updating customer: $e", 
