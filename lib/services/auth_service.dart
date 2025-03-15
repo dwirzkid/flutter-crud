@@ -28,7 +28,7 @@ class AuthService {
         Navigator.pop(context);
       }
 
-      // Setelah pendaftaran berhasil, arahkan ke menu sign in
+      // Setelah pendaftaran berhasil, 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SignInView()),
@@ -76,11 +76,7 @@ class AuthService {
       );
       await Future.delayed(const Duration(seconds: 1));
 
-      // Contoh: Anda dapat mengakses full name melalui:
-      // String? fullName = userCredential.user?.displayName;
-      // Gunakan fullName untuk menampilkan welcome message, dsb.
-
-      // Navigasi ke MainApp atau HomeView setelah sign in berhasil
+    
      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } on FirebaseAuthException catch (e) {
       String message = '';
